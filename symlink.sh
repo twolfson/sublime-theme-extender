@@ -1,4 +1,4 @@
-ln -s "$PWD" "~/.config/sublime-text-2/Packages/theme-extender"
-mkdir -p "Packages/User/Theme Extender"
+ln -s "$PWD" "$HOME/.config/sublime-text-2/Packages/Theme Extender"
+mkdir -p "$HOME/.config/sublime-text-2/Packages/User/Theme Extender"
 theme_name="Monokai Extended Bright.extended.tmTheme.plist"
-ln -s "$PWD/$theme_name" "~/.config/sublime-text-2/Packages/theme-extender/$theme_name"
+ln -s "$PWD/$theme_name" "$HOME/.config/sublime-text-2/Packages/User/Theme Extender/$theme_name"
