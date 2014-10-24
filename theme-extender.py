@@ -33,16 +33,31 @@ class ThemeExtenderExtendThemeCommand(sublime_plugin.WindowCommand):
             scheme_filename_root + '.extended' + scheme_filename_ext)
         extended_full_filepath = path.join(SUBLIME_ROOT, extended_filepath)
 
+        # If the theme was already in the Theme Extender folder, reset it to the current scheme
+        if scheme_filepath.startswith(THEME_EXTENDER_FOLDER):
+            extended_filepath = scheme_filepath
+            extended_full_filepath = scheme_full_filepath
+
         # If the ThemeExtender folder doesn't already exist, create it
         ThemeExtender.guarantee_theme_extender_folder()
 
-        # TODO: If a color scheme already exists, open the extension
+        # If the color scheme doesn't exist
+        if not path.exists(extended_full_filepath):
+            # Copy over the existing theme to the new location
+            shutil.copyfile(scheme_full_filepath, extended_full_filepath)
 
-        # Copy over the existing theme to the new location
-        shutil.copyfile(scheme_full_filepath, extended_full_filepath)
+            # Point the settings to the extended theme and save
+            settings.set('color_scheme', extended_filepath)
+            sublime.save_settings('Preferences.sublime-settings')
 
-        # TODO: Generate an extension file
-
-        # Point the settings to the extended theme and save
-        settings.set('color_scheme', extended_filepath)
-        sublime.save_settings('Preferences.sublime-settings')
+        # If a the extension already exists, open it
+        # e.g. 'Packages/User/ThemeExtender/Monokai Extended Bright.extended.tmTheme.plist'
+        extension_filepath = path.join(THEME_EXTENDER_FOLDER,
+            scheme_filename_root + '.extended' + scheme_filename_ext + '.plist')
+        extension_full_filepath = path.join(SUBLIME_ROOT, extension_filepath)
+        if path.exists(extension_full_filepath):
+            # TODO: Build me
+            pass
+        # Otherwise, open a new buffer pointing to it
+        else:
+            print "new buffer"
