@@ -1,6 +1,6 @@
 [
     {
-        "caption": "Theme Extender: Extend theme",
+        "caption": "Theme Extender: Extend theme/Update extension",
         "command": "theme_extender_extend_theme"
     }
 ]

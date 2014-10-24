@@ -4,7 +4,7 @@ import sublime
 import sublime_plugin
 
 SUBLIME_ROOT = path.join(sublime.packages_path(), '../')
-THEME_EXTENDER_FOLDER = 'Packages/User/ThemeExtender/'
+THEME_EXTENDER_FOLDER = 'Packages/User/Theme Extender/'
 
 class ThemeExtender():
     @classmethod
@@ -38,7 +38,7 @@ class ThemeExtenderExtendThemeCommand(sublime_plugin.WindowCommand):
         # TODO: If a color scheme already exists, open the extension
 
         # Copy over the existing theme to the new location
-        # shutil.copyfile(scheme_full_filepath, extended_full_filepath)
+        shutil.copyfile(scheme_full_filepath, extended_full_filepath)
 
         # TODO: Generate an extension file
 
