@@ -69,17 +69,22 @@ class ThemeExtenderExtendThemeCommand(sublime_plugin.WindowCommand):
 class ThemeExtenderListener(sublime_plugin.EventListener):
     def on_post_save(self, view):
         """When a save occurs to a ThemeExtender extension, re-extend the theme"""
-        # If we are in the wrong directory, exit early
-        filepath = view.file_name()
+        # TODO: Uncomment section outside of dev
+        # # If we are in the wrong directory, exit early
+        # filepath = view.file_name()
+        filepath = '/home/todd/.config/sublime-text-2/Packages/User/Theme Extender/Monokai Extended Bright.extended.tmTheme.plist'
         if not filepath.startswith(THEME_EXTENDER_FULL_FILEPATH):
             return
 
         # If the file is not an extension, exit early
-        filename = path.basename(filepath)
-        if not filename.endswith('.plist'):
+        if not filepath.endswith('.plist'):
             return
 
         # TODO: Attempt to load the file as a plist
+        # print plistlib.readPlistFromString(filepath)
+        from defusedxml import defusedxml
+        defusedxml.defuse_stdlib()
+        # print xml.etree.ElementTree.parse(filepath)
 
         # TODO: If we cannot, complain to the user
 
