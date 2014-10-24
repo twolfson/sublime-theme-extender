@@ -5,12 +5,13 @@ import sublime_plugin
 
 SUBLIME_ROOT = path.join(sublime.packages_path(), '../')
 THEME_EXTENDER_FOLDER = 'Packages/User/Theme Extender/'
+THEME_EXTENDER_FULL_FOLDER = path.join(SUBLIME_ROOT, 'Packages/User/Theme Extender/')
 
 class ThemeExtender():
     @classmethod
     def guarantee_theme_extender_folder(cls):
-        if not path.exists(THEME_EXTENDER_FOLDER):
-            makedirs(THEME_EXTENDER_FOLDER)
+        if not path.exists(THEME_EXTENDER_FULL_FOLDER):
+            makedirs(THEME_EXTENDER_FULL_FOLDER)
 
 class ThemeExtenderExtendThemeCommand(sublime_plugin.WindowCommand):
     def run(self):
