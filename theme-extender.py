@@ -65,13 +65,11 @@ class ThemeExtenderListener(sublime_plugin.EventListener):
         """When a save occurs to a ThemeExtender extension, re-extend the theme"""
         # If we are in the wrong directory, exit early
         filepath = view.file_name()
-        print filepath, filepath.startswith(THEME_EXTENDER_FULL_FILEPATH)
         if not filepath.startswith(THEME_EXTENDER_FULL_FILEPATH):
             return
 
         # If the file is not an extension, exit early
         filename = path.basename(filepath)
-        print filename
         if not filename.endswith('.plist'):
             return
 
