@@ -30,12 +30,14 @@ class ThemeExtenderExtendThemeCommand(sublime_plugin.WindowCommand):
 
         # Generate our new filepath
         # e.g. 'Packages/User/ThemeExtender/Monokai Extended Bright.extended.tmTheme'
+        extended_filename_root = scheme_filename_root + '.extended'
         extended_filepath = path.join(THEME_EXTENDER_FILEPATH,
-            scheme_filename_root + '.extended' + scheme_filename_ext)
+            extended_filename_root + scheme_filename_ext)
         extended_full_filepath = path.join(SUBLIME_ROOT, extended_filepath)
 
         # If the theme was already in the Theme Extender directory, reset it to the current scheme
         if scheme_filepath.startswith(THEME_EXTENDER_FILEPATH):
+            extended_filename_root = scheme_filename_root
             extended_filepath = scheme_filepath
             extended_full_filepath = scheme_full_filepath
 
@@ -55,7 +57,7 @@ class ThemeExtenderExtendThemeCommand(sublime_plugin.WindowCommand):
         # DEV: If it is new, the buffer will save it automagically
         # e.g. 'Packages/User/ThemeExtender/Monokai Extended Bright.extended.tmTheme.plist'
         extension_filepath = path.join(THEME_EXTENDER_FILEPATH,
-            scheme_filename_root + '.extended' + scheme_filename_ext + '.plist')
+            extended_filename_root + scheme_filename_ext + '.plist')
         extension_full_filepath = path.join(SUBLIME_ROOT, extension_filepath)
         # TODO: On fresh buffer add in explanation comments and reference to original file so we an extend it
         view = self.window.open_file(extension_full_filepath)
