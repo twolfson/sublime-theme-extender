@@ -50,14 +50,10 @@ class ThemeExtenderExtendThemeCommand(sublime_plugin.WindowCommand):
             settings.set('color_scheme', extended_filepath)
             sublime.save_settings('Preferences.sublime-settings')
 
-        # If a the extension already exists, open it
+        # Open a buffer to the file
+        # DEV: If it is new, the buffer will save it automagically
         # e.g. 'Packages/User/ThemeExtender/Monokai Extended Bright.extended.tmTheme.plist'
         extension_filepath = path.join(THEME_EXTENDER_FOLDER,
             scheme_filename_root + '.extended' + scheme_filename_ext + '.plist')
         extension_full_filepath = path.join(SUBLIME_ROOT, extension_filepath)
-        if path.exists(extension_full_filepath):
-            # TODO: Build me
-            pass
-        # Otherwise, open a new buffer pointing to it
-        else:
-            print "new buffer"
+        self.window.open_file(extension_full_filepath)
