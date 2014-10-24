@@ -77,8 +77,6 @@ class ThemeExtenderListener(sublime_plugin.EventListener):
         if not filename.endswith('.plist'):
             return
 
-        print "you are an extension. yis."
-
         # TODO: Attempt to load the file as a plist
 
         # TODO: If we cannot, complain to the user
