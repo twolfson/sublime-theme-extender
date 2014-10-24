@@ -58,7 +58,11 @@ class ThemeExtenderExtendThemeCommand(sublime_plugin.WindowCommand):
             scheme_filename_root + '.extended' + scheme_filename_ext + '.plist')
         extension_full_filepath = path.join(SUBLIME_ROOT, extension_filepath)
         # TODO: On fresh buffer add in explanation comments and reference to original file so we an extend it
-        self.window.open_file(extension_full_filepath)
+        view = self.window.open_file(extension_full_filepath)
+
+        # If the view is rendering plain text, change to XML
+        if view.settings().get('syntax') == path.join('Packages', 'Text', 'Plain text.tmLanguage'):
+            view.set_syntax_file(path.join('Packages', 'XML', 'XML.tmLanguage'))
 
 class ThemeExtenderListener(sublime_plugin.EventListener):
     def on_post_save(self, view):
