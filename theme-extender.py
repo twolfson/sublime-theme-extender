@@ -3,7 +3,7 @@ import shutil
 import sublime
 import sublime_plugin
 
-SUBLIME_ROOT = path.join(sublime.packages_path(), '../')
+SUBLIME_ROOT = path.normpath(path.join(sublime.packages_path(), '..'))
 THEME_EXTENDER_FILEPATH = path.join('Packages', 'User', 'Theme Extender')
 THEME_EXTENDER_FULL_FILEPATH = path.join(SUBLIME_ROOT, THEME_EXTENDER_FILEPATH)
 
@@ -65,6 +65,7 @@ class ThemeExtenderListener(sublime_plugin.EventListener):
         """When a save occurs to a ThemeExtender extension, re-extend the theme"""
         # If we are in the wrong directory, exit early
         filepath = view.file_name()
+        print filepath, filepath.startswith(THEME_EXTENDER_FULL_FILEPATH)
         if not filepath.startswith(THEME_EXTENDER_FULL_FILEPATH):
             return
 
