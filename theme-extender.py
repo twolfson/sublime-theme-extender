@@ -4,15 +4,15 @@ import sublime
 import sublime_plugin
 
 SUBLIME_ROOT = path.join(sublime.packages_path(), '../')
-THEME_EXTENDER_FOLDER = path.join('Packages', 'User', 'Theme Extender')
-THEME_EXTENDER_FULL_FOLDER = path.join(SUBLIME_ROOT, THEME_EXTENDER_FOLDER)
+THEME_EXTENDER_FILEPATH = path.join('Packages', 'User', 'Theme Extender')
+THEME_EXTENDER_FULL_FILEPATH = path.join(SUBLIME_ROOT, THEME_EXTENDER_FILEPATH)
 
 class ThemeExtender():
     @classmethod
-    def guarantee_theme_extender_folder(cls):
-        """Guarantee the theme extender folder exists so we can write files to it"""
-        if not path.exists(THEME_EXTENDER_FULL_FOLDER):
-            makedirs(THEME_EXTENDER_FULL_FOLDER)
+    def guarantee_theme_extender_directory(cls):
+        """Guarantee the theme extender directory exists so we can write files to it"""
+        if not path.exists(THEME_EXTENDER_FULL_FILEPATH):
+            makedirs(THEME_EXTENDER_FULL_FILEPATH)
 
 class ThemeExtenderExtendThemeCommand(sublime_plugin.WindowCommand):
     def run(self):
@@ -30,17 +30,17 @@ class ThemeExtenderExtendThemeCommand(sublime_plugin.WindowCommand):
 
         # Generate our new filepath
         # e.g. 'Packages/User/ThemeExtender/Monokai Extended Bright.extended.tmTheme'
-        extended_filepath = path.join(THEME_EXTENDER_FOLDER,
+        extended_filepath = path.join(THEME_EXTENDER_FILEPATH,
             scheme_filename_root + '.extended' + scheme_filename_ext)
         extended_full_filepath = path.join(SUBLIME_ROOT, extended_filepath)
 
-        # If the theme was already in the Theme Extender folder, reset it to the current scheme
-        if scheme_filepath.startswith(THEME_EXTENDER_FOLDER):
+        # If the theme was already in the Theme Extender directory, reset it to the current scheme
+        if scheme_filepath.startswith(THEME_EXTENDER_FILEPATH):
             extended_filepath = scheme_filepath
             extended_full_filepath = scheme_full_filepath
 
-        # If the ThemeExtender folder doesn't already exist, create it
-        ThemeExtender.guarantee_theme_extender_folder()
+        # If the ThemeExtender directory doesn't already exist, create it
+        ThemeExtender.guarantee_theme_extender_directory()
 
         # If the color scheme doesn't exist
         if not path.exists(extended_full_filepath):
@@ -54,7 +54,7 @@ class ThemeExtenderExtendThemeCommand(sublime_plugin.WindowCommand):
         # Open a buffer to the file
         # DEV: If it is new, the buffer will save it automagically
         # e.g. 'Packages/User/ThemeExtender/Monokai Extended Bright.extended.tmTheme.plist'
-        extension_filepath = path.join(THEME_EXTENDER_FOLDER,
+        extension_filepath = path.join(THEME_EXTENDER_FILEPATH,
             scheme_filename_root + '.extended' + scheme_filename_ext + '.plist')
         extension_full_filepath = path.join(SUBLIME_ROOT, extension_filepath)
         # TODO: On fresh buffer add in explanation comments and reference to original file so we an extend it
@@ -63,15 +63,18 @@ class ThemeExtenderExtendThemeCommand(sublime_plugin.WindowCommand):
 class ThemeExtenderListener(sublime_plugin.EventListener):
     def on_post_save(self, view):
         """When a save occurs to a ThemeExtender extension, re-extend the theme"""
-        # If we are in the wrong folder, exit early
+        # If we are in the wrong directory, exit early
         filepath = view.file_name()
-        if not filepath.startswith(THEME_EXTENDER_FULL_FOLDER):
+        if not filepath.startswith(THEME_EXTENDER_FULL_FILEPATH):
             return
 
         # If the file is not an extension, exit early
         filename = path.basename(filepath)
+        print filename
         if not filename.endswith('.plist'):
             return
+
+        print "you are an extension. yis."
 
         # TODO: Attempt to load the file as a plist
 
