@@ -57,3 +57,7 @@ class ThemeExtenderExtendThemeCommand(sublime_plugin.WindowCommand):
             scheme_filename_root + '.extended' + scheme_filename_ext + '.plist')
         extension_full_filepath = path.join(SUBLIME_ROOT, extension_filepath)
         self.window.open_file(extension_full_filepath)
+
+class ThemeExtenderListener(sublime_plugin.EventListener):
+    def on_post_save(self, view):
+        print 'haaaai'
