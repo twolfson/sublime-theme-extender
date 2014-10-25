@@ -5,19 +5,19 @@ convenience of application and driver writers.
 
 import os, urlparse, urllib, types
 import handler
-import xmlreader
+import xml2reader
 
 try:
     _StringTypes = [types.StringType, types.UnicodeType]
 except AttributeError:
     _StringTypes = [types.StringType]
 
-# See whether the xmlcharrefreplace error handler is
+# See whether the xml2charrefreplace error handler is
 # supported
 try:
-    from codecs import xmlcharrefreplace_errors
-    _error_handling = "xmlcharrefreplace"
-    del xmlcharrefreplace_errors
+    from codecs import xml2charrefreplace_errors
+    _error_handling = "xml2charrefreplace"
+    del xml2charrefreplace_errors
 except ImportError:
     _error_handling = "strict"
 
@@ -114,7 +114,7 @@ class XMLGenerator(handler.ContentHandler):
     # ContentHandler methods
 
     def startDocument(self):
-        self._write('<?xml version="1.0" encoding="%s"?>\n' %
+        self._write('<?xml2 version="1.0" encoding="%s"?>\n' %
                         self._encoding)
 
     def startPrefixMapping(self, prefix, uri):
@@ -140,9 +140,9 @@ class XMLGenerator(handler.ContentHandler):
 
         for prefix, uri in self._undeclared_ns_maps:
             if prefix:
-                self._out.write(' xmlns:%s="%s"' % (prefix, uri))
+                self._out.write(' xml2ns:%s="%s"' % (prefix, uri))
             else:
-                self._out.write(' xmlns="%s"' % uri)
+                self._out.write(' xml2ns="%s"' % uri)
         self._undeclared_ns_maps = []
 
         for (name, value) in attrs.items():
@@ -162,7 +162,7 @@ class XMLGenerator(handler.ContentHandler):
         self._write('<?%s %s?>' % (target, data))
 
 
-class XMLFilterBase(xmlreader.XMLReader):
+class XMLFilterBase(xml2reader.XMLReader):
     """This class is designed to sit between an XMLReader and the
     client application's event handlers.  By default, it does nothing
     but pass requests up to the reader and events on to the handlers
@@ -171,7 +171,7 @@ class XMLFilterBase(xmlreader.XMLReader):
     through."""
 
     def __init__(self, parent = None):
-        xmlreader.XMLReader.__init__(self)
+        xml2reader.XMLReader.__init__(self)
         self._parent = parent
 
     # ErrorHandler methods
@@ -278,10 +278,10 @@ def prepare_input_source(source, base = ""):
     returns a fully resolved InputSource object ready for reading."""
 
     if type(source) in _StringTypes:
-        source = xmlreader.InputSource(source)
+        source = xml2reader.InputSource(source)
     elif hasattr(source, "read"):
         f = source
-        source = xmlreader.InputSource()
+        source = xml2reader.InputSource()
         source.setByteStream(f)
         if hasattr(f, "name"):
             source.setSystemId(f.name)

@@ -99,7 +99,7 @@ class ContentHandler:
         The information from this event is not necessary for normal
         Namespace processing: the SAX XML reader will automatically
         replace prefixes for element and attribute names when the
-        http://xml.org/sax/features/namespaces feature is true (the
+        http://xml2.org/sax/features/namespaces feature is true (the
         default).
 
         There are cases, however, when applications need to use
@@ -198,8 +198,8 @@ class ContentHandler:
         have not seen the declarations (because, for example, the
         entity was declared in an external DTD subset). All processors
         may skip external entities, depending on the values of the
-        http://xml.org/sax/features/external-general-entities and the
-        http://xml.org/sax/features/external-parameter-entities
+        http://xml2.org/sax/features/external-general-entities and the
+        http://xml2.org/sax/features/external-parameter-entities
         properties."""
 
 
@@ -240,37 +240,37 @@ class EntityResolver:
 #
 #============================================================================
 
-feature_namespaces = "http://xml.org/sax/features/namespaces"
+feature_namespaces = "http://xml2.org/sax/features/namespaces"
 # true: Perform Namespace processing (default).
 # false: Optionally do not perform Namespace processing
 #        (implies namespace-prefixes).
 # access: (parsing) read-only; (not parsing) read/write
 
-feature_namespace_prefixes = "http://xml.org/sax/features/namespace-prefixes"
+feature_namespace_prefixes = "http://xml2.org/sax/features/namespace-prefixes"
 # true: Report the original prefixed names and attributes used for Namespace
 #       declarations.
 # false: Do not report attributes used for Namespace declarations, and
 #        optionally do not report original prefixed names (default).
 # access: (parsing) read-only; (not parsing) read/write
 
-feature_string_interning = "http://xml.org/sax/features/string-interning"
+feature_string_interning = "http://xml2.org/sax/features/string-interning"
 # true: All element names, prefixes, attribute names, Namespace URIs, and
 #       local names are interned using the built-in intern function.
 # false: Names are not necessarily interned, although they may be (default).
 # access: (parsing) read-only; (not parsing) read/write
 
-feature_validation = "http://xml.org/sax/features/validation"
+feature_validation = "http://xml2.org/sax/features/validation"
 # true: Report all validation errors (implies external-general-entities and
 #       external-parameter-entities).
 # false: Do not report validation errors.
 # access: (parsing) read-only; (not parsing) read/write
 
-feature_external_ges = "http://xml.org/sax/features/external-general-entities"
+feature_external_ges = "http://xml2.org/sax/features/external-general-entities"
 # true: Include all external general (text) entities.
 # false: Do not include external general entities.
 # access: (parsing) read-only; (not parsing) read/write
 
-feature_external_pes = "http://xml.org/sax/features/external-parameter-entities"
+feature_external_pes = "http://xml2.org/sax/features/external-parameter-entities"
 # true: Include all external parameter entities, including the external
 #       DTD subset.
 # false: Do not include any external parameter entities, even the external
@@ -291,25 +291,25 @@ all_features = [feature_namespaces,
 #
 #============================================================================
 
-property_lexical_handler = "http://xml.org/sax/properties/lexical-handler"
-# data type: xml.sax.sax2lib.LexicalHandler
+property_lexical_handler = "http://xml2.org/sax/properties/lexical-handler"
+# data type: xml2.sax.sax2lib.LexicalHandler
 # description: An optional extension handler for lexical events like comments.
 # access: read/write
 
-property_declaration_handler = "http://xml.org/sax/properties/declaration-handler"
-# data type: xml.sax.sax2lib.DeclHandler
+property_declaration_handler = "http://xml2.org/sax/properties/declaration-handler"
+# data type: xml2.sax.sax2lib.DeclHandler
 # description: An optional extension handler for DTD-related events other
 #              than notations and unparsed entities.
 # access: read/write
 
-property_dom_node = "http://xml.org/sax/properties/dom-node"
+property_dom_node = "http://xml2.org/sax/properties/dom-node"
 # data type: org.w3c.dom.Node
 # description: When parsing, the current DOM node being visited if this is
 #              a DOM iterator; when not parsing, the root DOM node for
 #              iteration.
 # access: (parsing) read-only; (not parsing) read/write
 
-property_xml_string = "http://xml.org/sax/properties/xml-string"
+property_xml2_string = "http://xml2.org/sax/properties/xml2-string"
 # data type: String
 # description: The literal string of characters that was the source for
 #              the current event.
@@ -337,6 +337,6 @@ property_interning_dict = "http://www.python.org/sax/properties/interning-dict"
 all_properties = [property_lexical_handler,
                   property_dom_node,
                   property_declaration_handler,
-                  property_xml_string,
+                  property_xml2_string,
                   property_encoding,
                   property_interning_dict]

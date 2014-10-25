@@ -1,16 +1,16 @@
 """Registration facilities for DOM. This module should not be used
 directly. Instead, the functions getDOMImplementation and
-registerDOMImplementation should be imported from xml.dom."""
+registerDOMImplementation should be imported from xml2.dom."""
 
-from xml.dom.minicompat import *  # isinstance, StringTypes
+from xml2.dom.minicompat import *  # isinstance, StringTypes
 
 # This is a list of well-known implementations.  Well-known names
-# should be published by posting to xml-sig@python.org, and are
+# should be published by posting to xml2-sig@python.org, and are
 # subsequently recorded in this file.
 
 well_known_implementations = {
-    'minidom':'xml.dom.minidom',
-    '4DOM': 'xml.dom.DOMImplementation',
+    'minidom':'xml2.dom.minidom',
+    '4DOM': 'xml2.dom.DOMImplementation',
     }
 
 # DOM implementations not officially registered should register

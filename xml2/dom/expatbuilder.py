@@ -27,22 +27,22 @@ This avoids all the overhead of SAX and pulldom to gain performance.
 #      calling any methods on the node object if it exists.  (A rather
 #      nice speedup is achieved this way as well!)
 
-from xml.dom import xmlbuilder, minidom, Node
-from xml.dom import EMPTY_NAMESPACE, EMPTY_PREFIX, XMLNS_NAMESPACE
-from xml.parsers import expat
-from xml.dom.minidom import _append_child, _set_attribute_node
-from xml.dom.NodeFilter import NodeFilter
+from xml2.dom import xml2builder, minidom, Node
+from xml2.dom import EMPTY_NAMESPACE, EMPTY_PREFIX, XMLNS_NAMESPACE
+from xml2.parsers import expat
+from xml2.dom.minidom import _append_child, _set_attribute_node
+from xml2.dom.NodeFilter import NodeFilter
 
-from xml.dom.minicompat import *
+from xml2.dom.minicompat import *
 
 TEXT_NODE = Node.TEXT_NODE
 CDATA_SECTION_NODE = Node.CDATA_SECTION_NODE
 DOCUMENT_NODE = Node.DOCUMENT_NODE
 
-FILTER_ACCEPT = xmlbuilder.DOMBuilderFilter.FILTER_ACCEPT
-FILTER_REJECT = xmlbuilder.DOMBuilderFilter.FILTER_REJECT
-FILTER_SKIP = xmlbuilder.DOMBuilderFilter.FILTER_SKIP
-FILTER_INTERRUPT = xmlbuilder.DOMBuilderFilter.FILTER_INTERRUPT
+FILTER_ACCEPT = xml2builder.DOMBuilderFilter.FILTER_ACCEPT
+FILTER_REJECT = xml2builder.DOMBuilderFilter.FILTER_REJECT
+FILTER_SKIP = xml2builder.DOMBuilderFilter.FILTER_SKIP
+FILTER_INTERRUPT = xml2builder.DOMBuilderFilter.FILTER_INTERRUPT
 
 theDOMImplementation = minidom.getDOMImplementation()
 
@@ -136,7 +136,7 @@ class ExpatBuilder:
 
     def __init__(self, options=None):
         if options is None:
-            options = xmlbuilder.Options()
+            options = xml2builder.Options()
         self._options = options
         if self._options.filter is not None:
             self._filter = FilterVisibilityController(self._options.filter)
@@ -190,7 +190,7 @@ class ExpatBuilder:
         else:
             parser.CharacterDataHandler = self.character_data_handler
         parser.ExternalEntityRefHandler = self.external_entity_ref_handler
-        parser.XmlDeclHandler = self.xml_decl_handler
+        parser.XmlDeclHandler = self.xml2_decl_handler
         parser.ElementDeclHandler = self.element_decl_handler
         parser.AttlistDeclHandler = self.attlist_decl_handler
 
@@ -445,7 +445,7 @@ class ExpatBuilder:
         info._attr_info.append(
             [None, name, None, None, default, 0, type, required])
 
-    def xml_decl_handler(self, version, encoding, standalone):
+    def xml2_decl_handler(self, version, encoding, standalone):
         self.document.version = version
         self.document.encoding = encoding
         # This is still a little ugly, thanks to the pyexpat API. ;-(
@@ -583,7 +583,7 @@ class Skipper(FilterCrutch):
 # Takes a string for the doctype, subset string, and namespace attrs string.
 
 _FRAGMENT_BUILDER_INTERNAL_SYSTEM_ID = \
-    "http://xml.python.org/entities/fragment-builder/internal"
+    "http://xml2.python.org/entities/fragment-builder/internal"
 
 _FRAGMENT_BUILDER_TEMPLATE = (
     '''\
@@ -756,11 +756,11 @@ class Namespaces:
         if self._ns_ordered_prefixes:
             for prefix, uri in self._ns_ordered_prefixes:
                 if prefix:
-                    a = minidom.Attr(_intern(self, 'xmlns:' + prefix),
-                                     XMLNS_NAMESPACE, prefix, "xmlns")
+                    a = minidom.Attr(_intern(self, 'xml2ns:' + prefix),
+                                     XMLNS_NAMESPACE, prefix, "xml2ns")
                 else:
-                    a = minidom.Attr("xmlns", XMLNS_NAMESPACE,
-                                     "xmlns", EMPTY_PREFIX)
+                    a = minidom.Attr("xml2ns", XMLNS_NAMESPACE,
+                                     "xml2ns", EMPTY_PREFIX)
                 d = a.childNodes[0].__dict__
                 d['data'] = d['nodeValue'] = uri
                 d = a.__dict__
@@ -849,9 +849,9 @@ class FragmentBuilderNS(Namespaces, FragmentBuilder):
                         continue
                     L.append(prefix)
                     if prefix:
-                        declname = "xmlns:" + prefix
+                        declname = "xml2ns:" + prefix
                     else:
-                        declname = "xmlns"
+                        declname = "xml2ns"
                     if attrs:
                         attrs = "%s\n    %s='%s'" % (attrs, declname, uri)
                     else:

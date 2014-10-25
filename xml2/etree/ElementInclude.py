@@ -66,9 +66,9 @@ class FatalIncludeError(SyntaxError):
 # Default loader.  This loader reads an included resource from disk.
 #
 # @param href Resource reference.
-# @param parse Parse mode.  Either "xml" or "text".
+# @param parse Parse mode.  Either "xml2" or "text".
 # @param encoding Optional text encoding.
-# @return The expanded resource.  If the parse mode is "xml", this
+# @return The expanded resource.  If the parse mode is "xml2", this
 #    is an ElementTree instance.  If the parse mode is "text", this
 #    is a Unicode string.  If the loader fails, it can return None
 #    or raise an IOError exception.
@@ -76,7 +76,7 @@ class FatalIncludeError(SyntaxError):
 
 def default_loader(href, parse, encoding=None):
     file = open(href)
-    if parse == "xml":
+    if parse == "xml2":
         data = ElementTree.parse(file).getroot()
     else:
         data = file.read()
@@ -106,8 +106,8 @@ def include(elem, loader=None):
         if e.tag == XINCLUDE_INCLUDE:
             # process xinclude directive
             href = e.get("href")
-            parse = e.get("parse", "xml")
-            if parse == "xml":
+            parse = e.get("parse", "xml2")
+            if parse == "xml2":
                 node = loader(href, parse)
                 if node is None:
                     raise FatalIncludeError(

@@ -1,5 +1,5 @@
-import xml.sax
-import xml.sax.handler
+import xml2.sax
+import xml2.sax.handler
 import types
 
 try:
@@ -16,12 +16,12 @@ PROCESSING_INSTRUCTION = "PROCESSING_INSTRUCTION"
 IGNORABLE_WHITESPACE = "IGNORABLE_WHITESPACE"
 CHARACTERS = "CHARACTERS"
 
-class PullDOM(xml.sax.ContentHandler):
+class PullDOM(xml2.sax.ContentHandler):
     _locator = None
     document = None
 
     def __init__(self, documentFactory=None):
-        from xml.dom import XML_NAMESPACE
+        from xml2.dom import XML_NAMESPACE
         self.documentFactory = documentFactory
         self.firstEvent = [None, None]
         self.lastEvent = self.firstEvent
@@ -32,7 +32,7 @@ class PullDOM(xml.sax.ContentHandler):
         except AttributeError:
             # use class' pop instead
             pass
-        self._ns_contexts = [{XML_NAMESPACE:'xml'}] # contains uri -> prefix dicts
+        self._ns_contexts = [{XML_NAMESPACE:'xml2'}] # contains uri -> prefix dicts
         self._current_context = self._ns_contexts[-1]
         self.pending_events = []
 
@@ -45,9 +45,9 @@ class PullDOM(xml.sax.ContentHandler):
         self._locator = locator
 
     def startPrefixMapping(self, prefix, uri):
-        if not hasattr(self, '_xmlns_attrs'):
-            self._xmlns_attrs = []
-        self._xmlns_attrs.append((prefix or 'xmlns', uri))
+        if not hasattr(self, '_xml2ns_attrs'):
+            self._xml2ns_attrs = []
+        self._xml2ns_attrs.append((prefix or 'xml2ns', uri))
         self._ns_contexts.append(self._current_context.copy())
         self._current_context[uri] = prefix or None
 
@@ -55,13 +55,13 @@ class PullDOM(xml.sax.ContentHandler):
         self._current_context = self._ns_contexts.pop()
 
     def startElementNS(self, name, tagName , attrs):
-        # Retrieve xml namespace declaration attributes.
-        xmlns_uri = 'http://www.w3.org/2000/xmlns/'
-        xmlns_attrs = getattr(self, '_xmlns_attrs', None)
-        if xmlns_attrs is not None:
-            for aname, value in xmlns_attrs:
-                attrs._attrs[(xmlns_uri, aname)] = value
-            self._xmlns_attrs = []
+        # Retrieve xml2 namespace declaration attributes.
+        xml2ns_uri = 'http://www.w3.org/2000/xml2ns/'
+        xml2ns_attrs = getattr(self, '_xml2ns_attrs', None)
+        if xml2ns_attrs is not None:
+            for aname, value in xml2ns_attrs:
+                attrs._attrs[(xml2ns_uri, aname)] = value
+            self._xml2ns_attrs = []
         uri, localname = name
         if uri:
             # When using namespaces, the reader may or may not
@@ -87,11 +87,11 @@ class PullDOM(xml.sax.ContentHandler):
 
         for aname,value in attrs.items():
             a_uri, a_localname = aname
-            if a_uri == xmlns_uri:
-                if a_localname == 'xmlns':
+            if a_uri == xml2ns_uri:
+                if a_localname == 'xml2ns':
                     qname = a_localname
                 else:
-                    qname = 'xmlns:' + a_localname
+                    qname = 'xml2ns:' + a_localname
                 attr = self.document.createAttributeNS(a_uri, qname)
                 node.setAttributeNodeNS(attr)
             elif a_uri:
@@ -164,8 +164,8 @@ class PullDOM(xml.sax.ContentHandler):
 
     def startDocument(self):
         if self.documentFactory is None:
-            import xml.dom.minidom
-            self.documentFactory = xml.dom.minidom.Document.implementation
+            import xml2.dom.minidom
+            self.documentFactory = xml2.dom.minidom.Document.implementation
 
     def buildDocument(self, uri, tagname):
         # Can't do that in startDocument, since we need the tagname
@@ -219,7 +219,7 @@ class DOMEventStream:
     def reset(self):
         self.pulldom = PullDOM()
         # This content handler relies on namespace support
-        self.parser.setFeature(xml.sax.handler.feature_namespaces, 1)
+        self.parser.setFeature(xml2.sax.handler.feature_namespaces, 1)
         self.parser.setContentHandler(self.pulldom)
 
     def __getitem__(self, pos):
@@ -335,7 +335,7 @@ def parse(stream_or_string, parser=None, bufsize=None):
     else:
         stream = stream_or_string
     if not parser:
-        parser = xml.sax.make_parser()
+        parser = xml2.sax.make_parser()
     return DOMEventStream(stream, parser, bufsize)
 
 def parseString(string, parser=None):
@@ -347,5 +347,5 @@ def parseString(string, parser=None):
     bufsize = len(string)
     buf = StringIO(string)
     if not parser:
-        parser = xml.sax.make_parser()
+        parser = xml2.sax.make_parser()
     return DOMEventStream(buf, parser, bufsize)

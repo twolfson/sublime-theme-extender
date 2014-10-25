@@ -1,9 +1,9 @@
 """Implementation of the DOM Level 3 'LS-Load' feature."""
 
 import copy
-import xml.dom
+import xml2.dom
 
-from xml.dom.NodeFilter import NodeFilter
+from xml2.dom.NodeFilter import NodeFilter
 
 
 __all__ = ["DOMBuilder", "DOMEntityResolver", "DOMInputSource"]
@@ -33,7 +33,7 @@ class Options:
     whitespace_in_element_content = True
     cdata_sections = True
     comments = True
-    charset_overrides_xml_encoding = True
+    charset_overrides_xml2_encoding = True
     infoset = False
     supported_mediatypes_only = False
 
@@ -78,13 +78,13 @@ class DOMBuilder:
             try:
                 settings = self._settings[(_name_xform(name), state)]
             except KeyError:
-                raise xml.dom.NotSupportedErr(
+                raise xml2.dom.NotSupportedErr(
                     "unsupported feature: %r" % (name,))
             else:
                 for name, value in settings:
                     setattr(self._options, name, value)
         else:
-            raise xml.dom.NotFoundErr("unknown feature: " + repr(name))
+            raise xml2.dom.NotFoundErr("unknown feature: " + repr(name))
 
     def supportsFeature(self, name):
         return hasattr(self._options, _name_xform(name))
@@ -136,10 +136,10 @@ class DOMBuilder:
             ("comments", 0)],
         ("comments", 1): [
             ("comments", 1)],
-        ("charset_overrides_xml_encoding", 0): [
-            ("charset_overrides_xml_encoding", 0)],
-        ("charset_overrides_xml_encoding", 1): [
-            ("charset_overrides_xml_encoding", 1)],
+        ("charset_overrides_xml2_encoding", 0): [
+            ("charset_overrides_xml2_encoding", 0)],
+        ("charset_overrides_xml2_encoding", 1): [
+            ("charset_overrides_xml2_encoding", 1)],
         ("infoset", 0): [],
         ("infoset", 1): [
             ("namespace_declarations", 0),
@@ -150,7 +150,7 @@ class DOMBuilder:
             ("datatype_normalization", 1),
             ("whitespace_in_element_content", 1),
             ("comments", 1),
-            ("charset_overrides_xml_encoding", 1)],
+            ("charset_overrides_xml2_encoding", 1)],
         ("supported_mediatypes_only", 0): [
             ("supported_mediatypes_only", 0)],
         ("namespaces", 0): [
@@ -169,13 +169,13 @@ class DOMBuilder:
                 return (options.datatype_normalization
                         and options.whitespace_in_element_content
                         and options.comments
-                        and options.charset_overrides_xml_encoding
+                        and options.charset_overrides_xml2_encoding
                         and not (options.namespace_declarations
                                  or options.validate_if_schema
                                  or options.create_entity_ref_nodes
                                  or options.entities
                                  or options.cdata_sections))
-            raise xml.dom.NotFoundErr("feature %s not known" % repr(name))
+            raise xml2.dom.NotFoundErr("feature %s not known" % repr(name))
 
     def parseURI(self, uri):
         if self.entityResolver:
@@ -200,8 +200,8 @@ class DOMBuilder:
         raise NotImplementedError("Haven't written this yet...")
 
     def _parse_bytestream(self, stream, options):
-        import xml.dom.expatbuilder
-        builder = xml.dom.expatbuilder.makeBuilder(options)
+        import xml2.dom.expatbuilder
+        builder = xml2.dom.expatbuilder.makeBuilder(options)
         return builder.parseFile(stream)
 
 
@@ -340,7 +340,7 @@ class DocumentLS:
         return False
     def _set_async(self, async):
         if async:
-            raise xml.dom.NotSupportedErr(
+            raise xml2.dom.NotSupportedErr(
                 "asynchronous document loading is not supported")
 
     def abort(self):
@@ -359,8 +359,8 @@ class DocumentLS:
         if snode is None:
             snode = self
         elif snode.ownerDocument is not self:
-            raise xml.dom.WrongDocumentErr()
-        return snode.toxml()
+            raise xml2.dom.WrongDocumentErr()
+        return snode.toxml2()
 
 
 class DOMImplementationLS:
@@ -369,12 +369,12 @@ class DOMImplementationLS:
 
     def createDOMBuilder(self, mode, schemaType):
         if schemaType is not None:
-            raise xml.dom.NotSupportedErr(
+            raise xml2.dom.NotSupportedErr(
                 "schemaType not yet supported")
         if mode == self.MODE_SYNCHRONOUS:
             return DOMBuilder()
         if mode == self.MODE_ASYNCHRONOUS:
-            raise xml.dom.NotSupportedErr(
+            raise xml2.dom.NotSupportedErr(
                 "asynchronous builders are not supported")
         raise ValueError("unknown value for mode")
 

@@ -1,7 +1,7 @@
 """W3C Document Object Model implementation for Python.
 
 The Python mapping of the Document Object Model is documented in the
-Python Library Reference in the section on the xml.dom package.
+Python Library Reference in the section on the xml2.dom package.
 
 This package contains the following modules:
 
@@ -131,7 +131,7 @@ class UserDataHandler:
     NODE_RENAMED  = 4
 
 XML_NAMESPACE = "http://www.w3.org/XML/1998/namespace"
-XMLNS_NAMESPACE = "http://www.w3.org/2000/xmlns/"
+XMLNS_NAMESPACE = "http://www.w3.org/2000/xml2ns/"
 XHTML_NAMESPACE = "http://www.w3.org/1999/xhtml"
 EMPTY_NAMESPACE = None
 EMPTY_PREFIX = None

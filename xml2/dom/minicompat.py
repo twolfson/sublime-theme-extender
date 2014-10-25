@@ -38,7 +38,7 @@
 
 __all__ = ["NodeList", "EmptyNodeList", "StringTypes", "defproperty"]
 
-import xml.dom
+import xml2.dom
 
 try:
     unicode
@@ -59,7 +59,7 @@ class NodeList(list):
         return len(self)
 
     def _set_length(self, value):
-        raise xml.dom.NoModificationAllowedErr(
+        raise xml2.dom.NoModificationAllowedErr(
             "attempt to modify read-only attribute 'length'")
 
     length = property(_get_length, _set_length,
@@ -92,7 +92,7 @@ class EmptyNodeList(tuple):
         return 0
 
     def _set_length(self, value):
-        raise xml.dom.NoModificationAllowedErr(
+        raise xml2.dom.NoModificationAllowedErr(
             "attempt to modify read-only attribute 'length'")
 
     length = property(_get_length, _set_length,
@@ -102,7 +102,7 @@ class EmptyNodeList(tuple):
 def defproperty(klass, name, doc):
     get = getattr(klass, ("_get_" + name)).im_func
     def set(self, value, name=name):
-        raise xml.dom.NoModificationAllowedErr(
+        raise xml2.dom.NoModificationAllowedErr(
             "attempt to modify read-only attribute " + repr(name))
     assert not hasattr(klass, "_set_" + name), \
            "expected not to find _set_" + name

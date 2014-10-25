@@ -1,7 +1,9 @@
+from __future__ import absolute_import
 from os import makedirs, path
 import shutil
 import sublime
 import sublime_plugin
+from xml2.dom.minidom import parse
 
 SUBLIME_ROOT = path.normpath(path.join(sublime.packages_path(), '..'))
 THEME_EXTENDER_FILEPATH = path.join('Packages', 'User', 'Theme Extender')
@@ -82,8 +84,7 @@ class ThemeExtenderListener(sublime_plugin.EventListener):
 
         # TODO: Attempt to load the file as a plist
         # print plistlib.readPlistFromString(filepath)
-        from defusedxml import defusedxml
-        defusedxml.defuse_stdlib()
+        parse(filepath)
         # print xml.etree.ElementTree.parse(filepath)
 
         # TODO: If we cannot, complain to the user

@@ -659,7 +659,7 @@ class ElementTree:
         if not encoding:
             encoding = "us-ascii"
         elif encoding != "utf-8" and encoding != "us-ascii":
-            file.write("<?xml version='1.0' encoding='%s'?>\n" % encoding)
+            file.write("<?xml2 version='1.0' encoding='%s'?>\n" % encoding)
         self._write(file, self._root, encoding, {})
 
     def _write(self, file, node, encoding, namespaces):
@@ -671,32 +671,32 @@ class ElementTree:
             file.write("<?%s?>" % _escape_cdata(node.text, encoding))
         else:
             items = node.items()
-            xmlns_items = [] # new namespaces in this scope
+            xml2ns_items = [] # new namespaces in this scope
             try:
                 if isinstance(tag, QName) or tag[:1] == "{":
-                    tag, xmlns = fixtag(tag, namespaces)
-                    if xmlns: xmlns_items.append(xmlns)
+                    tag, xml2ns = fixtag(tag, namespaces)
+                    if xml2ns: xml2ns_items.append(xml2ns)
             except TypeError:
                 _raise_serialization_error(tag)
             file.write("<" + _encode(tag, encoding))
-            if items or xmlns_items:
+            if items or xml2ns_items:
                 items.sort() # lexical order
                 for k, v in items:
                     try:
                         if isinstance(k, QName) or k[:1] == "{":
-                            k, xmlns = fixtag(k, namespaces)
-                            if xmlns: xmlns_items.append(xmlns)
+                            k, xml2ns = fixtag(k, namespaces)
+                            if xml2ns: xml2ns_items.append(xml2ns)
                     except TypeError:
                         _raise_serialization_error(k)
                     try:
                         if isinstance(v, QName):
-                            v, xmlns = fixtag(v, namespaces)
-                            if xmlns: xmlns_items.append(xmlns)
+                            v, xml2ns = fixtag(v, namespaces)
+                            if xml2ns: xml2ns_items.append(xml2ns)
                     except TypeError:
                         _raise_serialization_error(v)
                     file.write(" %s=\"%s\"" % (_encode(k, encoding),
                                                _escape_attrib(v, encoding)))
-                for k, v in xmlns_items:
+                for k, v in xml2ns_items:
                     file.write(" %s=\"%s\"" % (_encode(k, encoding),
                                                _escape_attrib(v, encoding)))
             if node.text or len(node):
@@ -708,7 +708,7 @@ class ElementTree:
                 file.write("</" + _encode(tag, encoding) + ">")
             else:
                 file.write(" />")
-            for k, v in xmlns_items:
+            for k, v in xml2ns_items:
                 del namespaces[v]
         if node.tail:
             file.write(_escape_cdata(node.tail, encoding))
@@ -766,10 +766,10 @@ _escape_map = {
 
 _namespace_map = {
     # "well-known" namespace prefixes
-    "http://www.w3.org/XML/1998/namespace": "xml",
+    "http://www.w3.org/XML/1998/namespace": "xml2",
     "http://www.w3.org/1999/xhtml": "html",
     "http://www.w3.org/1999/02/22-rdf-syntax-ns#": "rdf",
-    "http://schemas.xmlsoap.org/wsdl/": "wsdl",
+    "http://schemas.xml2soap.org/wsdl/": "wsdl",
 }
 
 def _raise_serialization_error(text):
@@ -841,13 +841,13 @@ def fixtag(tag, namespaces):
         if prefix is None:
             prefix = "ns%d" % len(namespaces)
         namespaces[namespace_uri] = prefix
-        if prefix == "xml":
-            xmlns = None
+        if prefix == "xml2":
+            xml2ns = None
         else:
-            xmlns = ("xmlns:%s" % prefix, namespace_uri)
+            xml2ns = ("xml2ns:%s" % prefix, namespace_uri)
     else:
-        xmlns = None
-    return "%s:%s" % (prefix, tag), xmlns
+        xml2ns = None
+    return "%s:%s" % (prefix, tag), xml2ns
 
 ##
 # Parses an XML document into an element tree.
@@ -1112,7 +1112,7 @@ class XMLTreeBuilder:
 
     def __init__(self, html=0, target=None):
         try:
-            from xml.parsers import expat
+            from xml2.parsers import expat
         except ImportError:
             raise ImportError(
                 "No module named expat; use SimpleXMLTreeBuilder instead"
@@ -1142,7 +1142,7 @@ class XMLTreeBuilder:
         encoding = None
         if not parser.returns_unicode:
             encoding = "utf-8"
-        # target.xml(encoding, None)
+        # target.xml2(encoding, None)
         self._doctype = None
         self.entity = {}
 
@@ -1194,7 +1194,7 @@ class XMLTreeBuilder:
             try:
                 self._target.data(self.entity[text[1:-1]])
             except KeyError:
-                from xml.parsers import expat
+                from xml2.parsers import expat
                 raise expat.error(
                     "undefined entity %s: line %d, column %d" %
                     (text, self._parser.ErrorLineNumber,

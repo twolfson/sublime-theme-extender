@@ -13,13 +13,13 @@ handler -- Base classes and constants which define the SAX 2 API for
 saxutils -- Implementation of the convenience classes commonly used to
             work with SAX.
 
-xmlreader -- Base classes and constants which define the SAX 2 API for
+xml2reader -- Base classes and constants which define the SAX 2 API for
              the parsers used with SAX for Python.
 
 expatreader -- Driver that allows use of the Expat parser with SAX.
 """
 
-from xmlreader import InputSource
+from xml2reader import InputSource
 from handler import ContentHandler, ErrorHandler
 from _exceptions import SAXException, SAXNotRecognizedException, \
                         SAXParseException, SAXNotSupportedException, \
@@ -51,19 +51,19 @@ def parseString(string, handler, errorHandler=ErrorHandler()):
 # this is the parser list used by the make_parser function if no
 # alternatives are given as parameters to the function
 
-default_parser_list = ["xml.sax.expatreader"]
+default_parser_list = ["xml2.sax.expatreader"]
 
 # tell modulefinder that importing sax potentially imports expatreader
 _false = 0
 if _false:
-    import xml.sax.expatreader
+    import xml2.sax.expatreader
 
 import os, sys
 if os.environ.has_key("PY_SAX_PARSER"):
     default_parser_list = os.environ["PY_SAX_PARSER"].split(",")
 del os
 
-_key = "python.xml.sax.parser"
+_key = "python.xml2.sax.parser"
 if sys.platform[:4] == "java" and sys.registry.containsKey(_key):
     default_parser_list = sys.registry.getProperty(_key).split(",")
 

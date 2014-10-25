@@ -5,30 +5,30 @@ pyexpat.__version__ == '2.22'.
 
 version = "0.20"
 
-from xml.sax._exceptions import *
-from xml.sax.handler import feature_validation, feature_namespaces
-from xml.sax.handler import feature_namespace_prefixes
-from xml.sax.handler import feature_external_ges, feature_external_pes
-from xml.sax.handler import feature_string_interning
-from xml.sax.handler import property_xml_string, property_interning_dict
+from xml2.sax._exceptions import *
+from xml2.sax.handler import feature_validation, feature_namespaces
+from xml2.sax.handler import feature_namespace_prefixes
+from xml2.sax.handler import feature_external_ges, feature_external_pes
+from xml2.sax.handler import feature_string_interning
+from xml2.sax.handler import property_xml2_string, property_interning_dict
 
-# xml.parsers.expat does not raise ImportError in Jython
+# xml2.parsers.expat does not raise ImportError in Jython
 import sys
 if sys.platform[:4] == "java":
     raise SAXReaderNotAvailable("expat not available in Java", None)
 del sys
 
 try:
-    from xml.parsers import expat
+    from xml2.parsers import expat
 except ImportError:
     raise SAXReaderNotAvailable("expat not supported", None)
 else:
     if not hasattr(expat, "ParserCreate"):
         raise SAXReaderNotAvailable("expat not supported", None)
-from xml.sax import xmlreader, saxutils, handler
+from xml2.sax import xml2reader, saxutils, handler
 
-AttributesImpl = xmlreader.AttributesImpl
-AttributesNSImpl = xmlreader.AttributesNSImpl
+AttributesImpl = xml2reader.AttributesImpl
+AttributesNSImpl = xml2reader.AttributesNSImpl
 
 # If we're using a sufficiently recent version of Python, we can use
 # weak references to avoid cycles between the parser and content
@@ -45,7 +45,7 @@ else:
 
 # --- ExpatLocator
 
-class ExpatLocator(xmlreader.Locator):
+class ExpatLocator(xml2reader.Locator):
     """Locator for use with the ExpatParser class.
 
     This uses a weak reference to the parser object to avoid creating
@@ -81,12 +81,12 @@ class ExpatLocator(xmlreader.Locator):
 
 # --- ExpatParser
 
-class ExpatParser(xmlreader.IncrementalParser, xmlreader.Locator):
+class ExpatParser(xml2reader.IncrementalParser, xml2reader.Locator):
     """SAX driver for the pyexpat C module."""
 
     def __init__(self, namespaceHandling=0, bufsize=2**16-20):
-        xmlreader.IncrementalParser.__init__(self, bufsize)
-        self._source = xmlreader.InputSource()
+        xml2reader.IncrementalParser.__init__(self, bufsize)
+        self._source = xml2reader.InputSource()
         self._parser = None
         self._namespaces = namespaceHandling
         self._lex_handler_prop = None
@@ -104,7 +104,7 @@ class ExpatParser(xmlreader.IncrementalParser, xmlreader.Locator):
         self._source = source
         self.reset()
         self._cont_handler.setDocumentLocator(ExpatLocator(self))
-        xmlreader.IncrementalParser.parse(self, source)
+        xml2reader.IncrementalParser.parse(self, source)
 
     def prepareParser(self, source):
         if source.getSystemId() is not None:
@@ -113,7 +113,7 @@ class ExpatParser(xmlreader.IncrementalParser, xmlreader.Locator):
     # Redefined setContentHandler to allow changing handlers during parsing
 
     def setContentHandler(self, handler):
-        xmlreader.IncrementalParser.setContentHandler(self, handler)
+        xml2reader.IncrementalParser.setContentHandler(self, handler)
         if self._parsing:
             self._reset_cont_handler()
 
@@ -164,7 +164,7 @@ class ExpatParser(xmlreader.IncrementalParser, xmlreader.Locator):
             return self._lex_handler_prop
         elif name == property_interning_dict:
             return self._interning
-        elif name == property_xml_string:
+        elif name == property_xml2_string:
             if self._parser:
                 if hasattr(self._parser, "GetInputContext"):
                     return self._parser.GetInputContext()
@@ -184,7 +184,7 @@ class ExpatParser(xmlreader.IncrementalParser, xmlreader.Locator):
                 self._reset_lex_handler_prop()
         elif name == property_interning_dict:
             self._interning = value
-        elif name == property_xml_string:
+        elif name == property_xml2_string:
             raise SAXNotSupportedException("Property '%s' cannot be set" %
                                            name)
         else:
@@ -385,7 +385,7 @@ class ExpatParser(xmlreader.IncrementalParser, xmlreader.Locator):
         self._source = source
 
         try:
-            xmlreader.IncrementalParser.parse(self, source)
+            xml2reader.IncrementalParser.parse(self, source)
         except:
             return 0  # FIXME: save error info here?
 
@@ -407,8 +407,8 @@ def create_parser(*args, **kwargs):
 # ---
 
 if __name__ == "__main__":
-    import xml.sax
+    import xml2.sax
     p = create_parser()
-    p.setContentHandler(xml.sax.XMLGenerator())
-    p.setErrorHandler(xml.sax.ErrorHandler())
-    p.parse("../../../hamlet.xml")
+    p.setContentHandler(xml2.sax.XMLGenerator())
+    p.setErrorHandler(xml2.sax.ErrorHandler())
+    p.parse("../../../hamlet.xml2")
