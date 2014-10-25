@@ -3,7 +3,7 @@ from os import makedirs, path
 import shutil
 import sublime
 import sublime_plugin
-from xml2.dom.minidom import parse
+from lxml import etree
 
 SUBLIME_ROOT = path.normpath(path.join(sublime.packages_path(), '..'))
 THEME_EXTENDER_FILEPATH = path.join('Packages', 'User', 'Theme Extender')
@@ -84,7 +84,8 @@ class ThemeExtenderListener(sublime_plugin.EventListener):
 
         # TODO: Attempt to load the file as a plist
         # print plistlib.readPlistFromString(filepath)
-        print parse(filepath)
+        with open(filepath) as file:
+            print file.read()
         # print xml.etree.ElementTree.parse(filepath)
 
         # TODO: If we cannot, complain to the user
