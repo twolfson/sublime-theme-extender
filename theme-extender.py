@@ -1,9 +1,15 @@
 from __future__ import absolute_import
 from os import makedirs, path
+import plistlib
 import shutil
 import sublime
 import sublime_plugin
-from lxml import etree
+import sys
+
+# DEV: Trying hackish patch from Sublime Text forums
+# TODO: Find better fix (if this even works)
+# http://www.sublimetext.com/forum/viewtopic.php?f=6&t=3825&p=18522&hilit=pyexpat#p18522
+sys.path.append('/usr/lib/python2.7/lib-dynload/')
 
 SUBLIME_ROOT = path.normpath(path.join(sublime.packages_path(), '..'))
 THEME_EXTENDER_FILEPATH = path.join('Packages', 'User', 'Theme Extender')
@@ -83,9 +89,7 @@ class ThemeExtenderListener(sublime_plugin.EventListener):
             return
 
         # TODO: Attempt to load the file as a plist
-        # print plistlib.readPlistFromString(filepath)
-        with open(filepath) as file:
-            print file.read()
+        print plistlib.readPlist(filepath)
         # print xml.etree.ElementTree.parse(filepath)
 
         # TODO: If we cannot, complain to the user
