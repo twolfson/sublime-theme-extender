@@ -84,7 +84,7 @@ class ThemeExtenderListener(sublime_plugin.EventListener):
 
         # TODO: Attempt to load the file as a plist
         # print plistlib.readPlistFromString(filepath)
-        parse(filepath)
+        print parse(filepath)
         # print xml.etree.ElementTree.parse(filepath)
 
         # TODO: If we cannot, complain to the user
