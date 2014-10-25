@@ -18,7 +18,7 @@ import xml2.dom
 
 from xml2.dom import EMPTY_NAMESPACE, EMPTY_PREFIX, XMLNS_NAMESPACE, domreg
 from xml2.dom.minicompat import *
-from xml2.dom.xml2builder import DOMImplementationLS, DocumentLS
+from xml2.dom.xmlbuilder import DOMImplementationLS, DocumentLS
 
 # This is used by the ID-cache invalidation checks; the list isn't
 # actually complete, since the nodes being checked will never be the

@@ -27,7 +27,7 @@ This avoids all the overhead of SAX and pulldom to gain performance.
 #      calling any methods on the node object if it exists.  (A rather
 #      nice speedup is achieved this way as well!)
 
-from xml2.dom import xml2builder, minidom, Node
+from xml2.dom import xmlbuilder, minidom, Node
 from xml2.dom import EMPTY_NAMESPACE, EMPTY_PREFIX, XMLNS_NAMESPACE
 from xml2.parsers import expat
 from xml2.dom.minidom import _append_child, _set_attribute_node
@@ -39,10 +39,10 @@ TEXT_NODE = Node.TEXT_NODE
 CDATA_SECTION_NODE = Node.CDATA_SECTION_NODE
 DOCUMENT_NODE = Node.DOCUMENT_NODE
 
-FILTER_ACCEPT = xml2builder.DOMBuilderFilter.FILTER_ACCEPT
-FILTER_REJECT = xml2builder.DOMBuilderFilter.FILTER_REJECT
-FILTER_SKIP = xml2builder.DOMBuilderFilter.FILTER_SKIP
-FILTER_INTERRUPT = xml2builder.DOMBuilderFilter.FILTER_INTERRUPT
+FILTER_ACCEPT = xmlbuilder.DOMBuilderFilter.FILTER_ACCEPT
+FILTER_REJECT = xmlbuilder.DOMBuilderFilter.FILTER_REJECT
+FILTER_SKIP = xmlbuilder.DOMBuilderFilter.FILTER_SKIP
+FILTER_INTERRUPT = xmlbuilder.DOMBuilderFilter.FILTER_INTERRUPT
 
 theDOMImplementation = minidom.getDOMImplementation()
 
@@ -136,7 +136,7 @@ class ExpatBuilder:
 
     def __init__(self, options=None):
         if options is None:
-            options = xml2builder.Options()
+            options = xmlbuilder.Options()
         self._options = options
         if self._options.filter is not None:
             self._filter = FilterVisibilityController(self._options.filter)
