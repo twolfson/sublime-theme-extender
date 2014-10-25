@@ -2,6 +2,8 @@
 
 Extend and customize Sublime Text themes
 
+**Abandoned for now:** Sublime Text 2 does not easily support reading/writing plists/XML with the Python built-ins. We could not find a non-compiled Python library that would work for XML so we have abandoned ship for now.
+
 ## Getting Started
 ### Installation
 This package is available under `theme-extender` inside of [Package Control][], a [Sublime Text][] plugin that allows for easy management of other plugins.
