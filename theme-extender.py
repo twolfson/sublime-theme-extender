@@ -9,7 +9,7 @@ import sys
 # DEV: Trying hackish patch from Sublime Text forums
 # TODO: Find better fix (if this even works)
 # http://www.sublimetext.com/forum/viewtopic.php?f=6&t=3825&p=18522&hilit=pyexpat#p18522
-sys.path.append('/usr/lib/python2.7/lib-dynload/')
+sys.path.append('/home/todd/Downloads/python2/Python-2.6.6/build/lib.linux-x86_64-2.6/')
 
 SUBLIME_ROOT = path.normpath(path.join(sublime.packages_path(), '..'))
 THEME_EXTENDER_FILEPATH = path.join('Packages', 'User', 'Theme Extender')
